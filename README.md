@@ -6,24 +6,6 @@ Aplicación web fullstack construida sobre Node.js + Express + EJS, con persiste
 
 ---
 
-## Tabla de contenidos
-
-- [Características](#características)
-- [Stack tecnológico](#stack-tecnológico)
-- [Requisitos previos](#requisitos-previos)
-- [Instalación](#instalación)
-- [Ejecución](#ejecución)
-- [Pruebas](#pruebas)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Arquitectura](#arquitectura)
-- [Modelo de datos](#modelo-de-datos)
-- [Rutas HTTP](#rutas-http)
-- [Sistema de diseño (UI Kit)](#sistema-de-diseño-ui-kit)
-- [Seguridad](#seguridad)
-- [Próximos pasos](#próximos-pasos)
-
----
-
 ## Características
 
 - 🔐 **Registro e inicio de sesión** con contraseñas hasheadas (bcrypt).
