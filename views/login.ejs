@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Inicia sesión en SaludYa para gestionar tus citas médicas">
+  <title><%= titulo %> - SaludYa</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Botón para cambiar tema -->
+  <button id="theme-toggle" title="Cambiar tema" aria-label="Cambiar tema">
+    <i data-lucide="moon"></i>
+  </button>
+
+  <!-- Contenedor principal de autenticación -->
+  <div class="auth-container">
+    <!-- Encabezado con logo (fuera del card) -->
+    <div class="auth-header">
+      <div class="logo-container">
+        <div class="logo-icon">
+          <i data-lucide="heart"></i>
+        </div>
+        <h2 class="logo-text">SaludYa</h2>
+      </div>
+    </div>
+
+    <!-- Tarjeta de autenticación -->
+    <div class="auth-card">
+      <!-- Título dentro del card -->
+      <h1 class="auth-title"><%= titulo %></h1>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+      <% if (typeof mensaje !== 'undefined' && mensaje) { %>
+        <div class="alert alert-success"><%= mensaje %></div>
+      <% } %>
+
+      <!-- Formulario de inicio de sesión -->
+      <form class="auth-form" method="POST" action="/login">
+        <!-- Campo de correo -->
+        <div class="form-group">
+          <label for="email" class="form-label"><span class="form-label-required">*</span> Correo electrónico</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            placeholder=""
+            required
+            autocomplete="email"
+          >
+        </div>
+
+        <!-- Campo de contraseña -->
+        <div class="form-group">
+          <label for="password" class="form-label"><span class="form-label-required">*</span> Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            placeholder=""
+            required
+            autocomplete="current-password"
+          >
+        </div>
+
+        <!-- Botón de envío -->
+        <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+          Ingresar
+        </button>
+      </form>
+
+      <!-- Enlace a registro -->
+      <div class="auth-link">
+        ¿No tienes cuenta? <a href="/registro">Crear cuenta</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // Inicializar iconos de Lucide
+    lucide.createIcons();
+
+    // Funcionalidad del toggle de tema
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // Restaurar tema guardado o usar preferencia del sistema
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.body.classList.add('dark-mode');
+    }
+
+    // Escuchar cambios en el tema
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+
+      // Cambiar icono dinámicamente
+      const icon = themeToggle.querySelector('i');
+      icon.setAttribute('data-lucide', isDarkMode ? 'sun' : 'moon');
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

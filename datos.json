@@ -1,0 +1,25 @@
+{
+  "usuarios": [
+    {
+      "id": "mq4k54yr1i7kec",
+      "fullname": "Gabriel Gaitan",
+      "email": "gabrielgaitanveng@gmail.com",
+      "phone": "3203662637",
+      "passwordHash": "$2b$10$QSd2FtAPDPlWlz7RvGrwOuRoTOEpdV64n4wJ/8JWkF9CVRYt95TbC",
+      "creadoEn": "2026-06-08T01:54:07.587Z"
+    }
+  ],
+  "citas": [
+    {
+      "id": "mq4k6n1psukxmx",
+      "usuarioId": "mq4k54yr1i7kec",
+      "medico": "Jorge",
+      "especialidad": "neuro",
+      "fecha": "2027-06-17",
+      "hora": "22:58",
+      "ubicacion": "",
+      "estado": "pendiente",
+      "creadaEn": "2026-06-08T01:55:17.677Z"
+    }
+  ]
+}

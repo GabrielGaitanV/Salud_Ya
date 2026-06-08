@@ -1,0 +1,37 @@
+{
+  "name": "saludya",
+  "version": "1.0.0",
+  "description": "MVP de SaludYa - Sistema de gestión de citas médicas",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFiles": ["<rootDir>/__tests__/jest.setup.js"],
+    "testPathIgnorePatterns": ["/node_modules/", "/__tests__/jest.setup.js", "/__tests__/helpers/"]
+  },
+  "keywords": [
+    "salud",
+    "citas",
+    "médico"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-session": "^1.19.0"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2"
+  }
+}

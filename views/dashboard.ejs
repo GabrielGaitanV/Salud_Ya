@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Panel de usuario - Gestiona tus citas médicas en SaludYa">
+  <title><%= titulo %> - SaludYa</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <button id="theme-toggle" title="Cambiar tema" aria-label="Cambiar tema">
+    <i data-lucide="moon"></i>
+  </button>
+
+  <nav class="navbar">
+    <div class="navbar-content">
+      <a href="/dashboard" class="navbar-brand" style="display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+        <div style="width: 36px; height: 36px; background-color: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+          <i data-lucide="heart" style="width: 20px; height: 20px; color: white;"></i>
+        </div>
+        <span>SaludYa</span>
+      </a>
+      <ul class="navbar-nav">
+        <li><a href="/dashboard">Panel</a></li>
+        <li><a href="#mis-citas">Mis citas</a></li>
+        <li><a href="#agendar">Agendar</a></li>
+        <li><form method="POST" action="/logout" style="margin: 0;">
+          <button type="submit" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem;">
+            Salir
+          </button>
+        </form></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container dashboard-container">
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Bienvenido, <%= usuario.fullname.split(' ')[0] %></h1>
+      <p class="dashboard-subtitle">Aquí puedes gestionar tus citas médicas y tu información personal</p>
+    </div>
+
+    <% if (error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+    <% if (mensaje) { %>
+      <div class="alert alert-success"><%= mensaje %></div>
+    <% } %>
+
+    <div class="dashboard-grid">
+      <!-- Tarjeta: Tu información -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Tu información</h3>
+        </div>
+        <div class="card-body">
+          <div class="info-row">
+            <span class="info-label">Nombre completo</span>
+            <span class="info-value"><%= usuario.fullname %></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Correo electrónico</span>
+            <span class="info-value"><%= usuario.email %></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Teléfono</span>
+            <span class="info-value"><%= usuario.phone %></span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Miembro desde</span>
+            <span class="info-value"><%= new Date(usuario.creadoEn).toLocaleDateString('es-ES') %></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta: Próxima cita -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Próxima cita</h3>
+        </div>
+        <div class="card-body">
+          <% const proxima = citas.find(c => new Date(c.fecha + 'T' + c.hora) >= new Date()); %>
+          <% if (proxima) { %>
+            <div class="info-row">
+              <span class="info-label">Médico</span>
+              <span class="info-value"><%= proxima.medico %></span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Especialidad</span>
+              <span class="info-value"><%= proxima.especialidad %></span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Fecha</span>
+              <span class="info-value"><%= new Date(proxima.fecha).toLocaleDateString('es-ES', { day:'numeric', month:'long', year:'numeric' }) %></span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Hora</span>
+              <span class="info-value"><%= proxima.hora %></span>
+            </div>
+            <% if (proxima.ubicacion) { %>
+              <div class="info-row">
+                <span class="info-label">Ubicación</span>
+                <span class="info-value"><%= proxima.ubicacion %></span>
+              </div>
+            <% } %>
+          <% } else { %>
+            <p style="margin: 0;">No tienes citas próximas. Agenda una desde el formulario de abajo.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mis citas -->
+    <div id="mis-citas" style="margin-top: 3rem;">
+      <h2 style="margin-bottom: 1.5rem;">Mis citas (<%= citas.length %>)</h2>
+      <% if (citas.length === 0) { %>
+        <div class="card">
+          <p style="margin: 0;">Aún no has agendado ninguna cita.</p>
+        </div>
+      <% } else { %>
+        <div class="dashboard-grid">
+          <% citas.forEach(cita => { %>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title"><%= cita.especialidad %></h3>
+              </div>
+              <div class="card-body">
+                <div class="info-row">
+                  <span class="info-label">Médico</span>
+                  <span class="info-value"><%= cita.medico %></span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Fecha</span>
+                  <span class="info-value"><%= new Date(cita.fecha).toLocaleDateString('es-ES') %></span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Hora</span>
+                  <span class="info-value"><%= cita.hora %></span>
+                </div>
+                <% if (cita.ubicacion) { %>
+                  <div class="info-row">
+                    <span class="info-label">Ubicación</span>
+                    <span class="info-value"><%= cita.ubicacion %></span>
+                  </div>
+                <% } %>
+              </div>
+              <div class="card-footer">
+                <form method="POST" action="/citas/<%= cita.id %>/cancelar" style="margin: 0;" onsubmit="return confirm('¿Cancelar esta cita?');">
+                  <button type="submit" class="btn btn-danger">Cancelar</button>
+                </form>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Agendar nueva cita -->
+    <div id="agendar" class="card" style="margin-top: 3rem;">
+      <div class="card-header">
+        <h3 class="card-title">Agendar nueva cita</h3>
+      </div>
+      <form method="POST" action="/citas" class="auth-form">
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="medico" class="form-label"><span class="form-label-required">*</span> Médico</label>
+            <input type="text" id="medico" name="medico" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="especialidad" class="form-label"><span class="form-label-required">*</span> Especialidad</label>
+            <input type="text" id="especialidad" name="especialidad" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="fecha" class="form-label"><span class="form-label-required">*</span> Fecha</label>
+            <input type="date" id="fecha" name="fecha" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="hora" class="form-label"><span class="form-label-required">*</span> Hora</label>
+            <input type="time" id="hora" name="hora" class="form-control" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="ubicacion" class="form-label">Ubicación</label>
+          <input type="text" id="ubicacion" name="ubicacion" class="form-control" placeholder="Ej: Hospital Central, Sala 302">
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Agendar cita</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.body.classList.add('dark-mode');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const isDarkMode = document.body.classList.contains('dark-mode');
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+      const icon = themeToggle.querySelector('i');
+      icon.setAttribute('data-lucide', isDarkMode ? 'sun' : 'moon');
+      lucide.createIcons();
+    });
+
+    // Fecha mínima = hoy
+    const fechaInput = document.getElementById('fecha');
+    if (fechaInput) fechaInput.min = new Date().toISOString().split('T')[0];
+  </script>
+</body>
+</html>
